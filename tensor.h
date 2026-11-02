@@ -85,5 +85,9 @@ class Tensor{
 
         //инструменты
         const size_t& GetFlatIndex(std::vector<size_t> index) const;
+
+        //операторы умножений
+        Tensor Hadamart (const Tensor& t1, const Tensor& t2);
+        Tensor Tensor::MatrixMult (const Tensor& t1, const Tensor& t2);
 };
 

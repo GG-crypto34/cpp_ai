@@ -183,3 +183,45 @@ Tensor operator + (const Tensor& t1, const Tensor& t2)
     };
     return result;
 };
+
+Tensor operator - (const Tensor& t1, const Tensor& t2)
+{
+    if(t1.GetShape() != t2.GetShape()){throw "Invalid argument";};
+    Tensor result{std::vector<float>(t1.GetData().size(), 1), t1.GetShape()};
+    std::vector<size_t> index(t1.GetShape().size(), 0);
+    for(size_t i = 0; i < t1.GetData().size(); i++)
+    {
+        for(size_t i1 = index.size() - 1; i1 > 0; i1 --)
+        {
+            if(index.at(i1) >= t1.GetShape().at(i1)){ index.at(i1) = 0; index.at(i1 - 1) += 1;};
+        }; 
+        result.EditOnIndex(index, t1.GetDataAt(index) - t2.GetDataAt(index));
+        index.at(index.size() - 1) += 1;
+    };
+    return result;
+};
+
+Tensor Tensor::Hadamart (const Tensor& t1, const Tensor& t2) //умножение тензоров по Адамару
+{
+    if(t1.GetShape() != t2.GetShape()){throw "Invalid argument";};
+    Tensor result{std::vector<float>(t1.GetData().size(), 1), t1.GetShape()};
+    std::vector<size_t> index(t1.GetShape().size(), 0);
+    for(size_t i = 0; i < t1.GetData().size(); i++)
+    {
+        for(size_t i1 = index.size() - 1; i1 > 0; i1 --)
+        {
+            if(index.at(i1) >= t1.GetShape().at(i1)){ index.at(i1) = 0; index.at(i1 - 1) += 1;};
+        }; 
+        result.EditOnIndex(index, t1.GetDataAt(index) * t2.GetDataAt(index));
+        index.at(index.size() - 1) += 1;
+    };
+    return result;
+};
+
+Tensor Tensor::MatrixMult (const Tensor& t1, const Tensor& t2) // только для двумерных тензеров ака матриц
+{
+    if(t1.GetShape().size() != 2 || t2.GetShape().size() != 2){ throw "Invalid Argument(invalid shape of tensors)";};
+    if(t1.GetShape().at(t1.GetShape().size() - 1) != t2.GetShape().at(0)){ throw "Invalid Argument(invalid shape of tensors)";};
+    Tensor result{std::vector<float>(t1.GetShape().at(0)*t2.GetShape().at(t2.GetShape().size() - 1), 1), t1.GetShape()};
+    // to be continued...
+};
