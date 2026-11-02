@@ -6,16 +6,16 @@ class Tensor{
         std::vector<float> Data_;
         std::vector<size_t> Shape_;
         std::vector<size_t> Strides_;
-        bool IsNonContiguous_ = false;
-        void ContiguousCheck()
+        bool IsNonContiguous_ = true;
+        void ContiguousCheck() //пока нигде не вызывается
         {
-            if(Strides_ == calculateStridesReturn())
+            if(Strides_ == calculateStridesReturn()) //TODO: сделать нормальную проверку а не просто через strides
             {
-                IsNonContiguous_ = false;
+                IsNonContiguous_ = true;
             }
             else
             {
-                IsNonContiguous_ = true;
+                IsNonContiguous_ = false;
             };
         };
         void calculateStrides() // вызывается в сеттере формы для изменения Strides_
@@ -30,7 +30,7 @@ class Tensor{
 
             Strides_ = resultStrides;
         };
-        std::vector<size_t> calculateStridesReturn()
+        const std::vector<size_t>& calculateStridesReturn()
         {
             size_t size = Shape_.size();
             std::vector<size_t> resultStrides(size, 1);
@@ -55,7 +55,7 @@ class Tensor{
                 Data_ = data;
                 Shape_ = shape;
                 calculateStrides();
-                IsNonContiguous_ = false;
+                IsNonContiguous_ = true;
             }
             else
             {
@@ -81,4 +81,7 @@ class Tensor{
         void DangerEditOnIndex(std::vector<size_t> index, float value);
         void DangerTranspose(std::vector<size_t> permutations);
         const float& DangerGetDataAt(std::vector<size_t> index) const;
+
+        //инструменты
+        const size_t& GetFlatIndex(std::vector<size_t> index) const;
 };

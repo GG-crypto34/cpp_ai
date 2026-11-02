@@ -32,7 +32,7 @@ void Tensor::Reshape(std::vector<size_t> shape)
     {
         sizeOfTensor = sizeOfTensor * shape[i];
     };
-    if(sizeOfTensor == Data_.size() && !IsNonContiguous_)
+    if(sizeOfTensor == Data_.size() && IsNonContiguous_)
     {
         Shape_ = shape;
         calculateStrides();
@@ -92,7 +92,7 @@ void Tensor::Transpose(std::vector<size_t> permutations)
     };
     Shape_ = fShape;
     Strides_ = fStrides;
-    IsNonContiguous_ = true;
+    IsNonContiguous_ = false;
 };
 
 void Tensor::DangerSetData(std::vector<float> data)
@@ -108,21 +108,13 @@ void Tensor::DangerReshape(std::vector<size_t> shape)
 
 const float& Tensor::DangerGetDataAt(std::vector<size_t> index) const
 {
-    size_t findex{0};
-    for(size_t i = 0; i < index.size(); i++)
-    {
-        findex += index.at(i)*Strides_.at(i);
-    };
+    size_t findex = GetFlatIndex(index);
     return Data_.at(findex);
 };
 
 void Tensor::DangerEditOnIndex(std::vector<size_t> index, float value)
 {
-    size_t findex{0};
-    for(size_t i = 0; i < index.size(); i++)
-    {
-        findex += index.at(i)*Strides_.at(i);
-    };
+    size_t findex = GetFlatIndex(index);
     Data_.at(findex) = value;
 };
 
@@ -137,5 +129,15 @@ void Tensor::DangerTranspose(std::vector<size_t> permutations)
     };
     Shape_ = fShape;
     Strides_ = fStrides;
-    IsNonContiguous_ = true;
+    IsNonContiguous_ = false;
+};
+
+const size_t& Tensor::GetFlatIndex(std::vector<size_t> index) const
+{
+    size_t findex{0};
+    for(size_t i = 0; i < index.size(); i++)
+    {
+        findex += index.at(i)*Strides_.at(i);
+    };
+    return findex;
 };
