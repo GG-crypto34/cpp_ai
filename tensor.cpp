@@ -222,6 +222,15 @@ Tensor Tensor::MatrixMult (const Tensor& t1, const Tensor& t2) // только �
 {
     if(t1.GetShape().size() != 2 || t2.GetShape().size() != 2){ throw "Invalid Argument(invalid shape of tensors)";};
     if(t1.GetShape().at(t1.GetShape().size() - 1) != t2.GetShape().at(0)){ throw "Invalid Argument(invalid shape of tensors)";};
-    Tensor result{std::vector<float>(t1.GetShape().at(0)*t2.GetShape().at(t2.GetShape().size() - 1), 1), t1.GetShape()};
-    // to be continued...
+    Tensor result(std::vector<float>((t1.GetShape().at(0)*t2.GetShape().at(t2.GetShape().size() - 1)), 0), std::vector<size_t>{t1.GetShape().at(0), t2.GetShape().at(t2.GetShape().size() - 1)});
+    for(size_t i = 0; i < t1.GetShape().at(0); i++)
+    {
+        for(size_t i1 = 0; i1 < t2.GetShape().at(t2.GetShape().size() - 1); i1++)
+        {
+            float product (0);
+            for(size_t i2 = 0; i2 < t1.GetShape().at(t1.GetShape().size()-1); i2++){ product += t1.GetDataAt(std::vector<size_t>{i, i2}) * t2.GetDataAt(std::vector<size_t>{i2, i1});};
+            result.EditOnIndex(std::vector<size_t>{i,i1}, product);
+        };
+    };
+    return result;
 };
