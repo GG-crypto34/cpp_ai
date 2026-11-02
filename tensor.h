@@ -6,16 +6,16 @@ class Tensor{
         std::vector<float> Data_;
         std::vector<size_t> Shape_;
         std::vector<size_t> Strides_;
-        bool IsNonContiguous_ = true;
+        bool IsContiguous_ = true;
         void ContiguousCheck() //пока нигде не вызывается
         {
             if(Strides_ == calculateStridesReturn()) //TODO: сделать нормальную проверку а не просто через strides
             {
-                IsNonContiguous_ = true;
+                IsContiguous_ = true;
             }
             else
             {
-                IsNonContiguous_ = false;
+                IsContiguous_ = false;
             };
         };
         void calculateStrides() // вызывается в сеттере формы для изменения Strides_
@@ -55,7 +55,7 @@ class Tensor{
                 Data_ = data;
                 Shape_ = shape;
                 calculateStrides();
-                IsNonContiguous_ = true;
+                IsContiguous_ = true;
             }
             else
             {
@@ -74,6 +74,7 @@ class Tensor{
         void Reshape(std::vector<size_t> shape); // тоже проверить валидность преобразования или сделать автообрезание/дополнение даты
         void EditOnIndex(std::vector<size_t> index, float value);
         void Transpose(std::vector<size_t> permutations);
+        void MakeContiguous();
         
         //опасные методы без проверок
         void DangerSetData(std::vector<float> data);
