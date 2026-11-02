@@ -6,16 +6,16 @@ class Tensor{
         std::vector<float> Data_;
         std::vector<size_t> Shape_;
         std::vector<size_t> Strides_;
-        bool IsContiguous_ = false;
+        bool IsNonContiguous_ = false;
         void ContiguousCheck()
         {
             if(Strides_ == calculateStridesReturn())
             {
-                IsContiguous_ = false;
+                IsNonContiguous_ = false;
             }
             else
             {
-                IsContiguous_ = true;
+                IsNonContiguous_ = true;
             };
         };
         void calculateStrides() // вызывается в сеттере формы для изменения Strides_
@@ -55,6 +55,7 @@ class Tensor{
                 Data_ = data;
                 Shape_ = shape;
                 calculateStrides();
+                IsNonContiguous_ = false;
             }
             else
             {

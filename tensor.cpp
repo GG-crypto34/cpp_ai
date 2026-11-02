@@ -27,11 +27,12 @@ void Tensor::SetData(std::vector<float> data)
 void Tensor::Reshape(std::vector<size_t> shape)
 {
     size_t sizeOfTensor = 1;
+    ContiguousCheck();
     for(size_t i = 0; i < shape.size(); i++) 
     {
         sizeOfTensor = sizeOfTensor * shape[i];
     };
-    if(sizeOfTensor == Data_.size() && IsContiguous_)
+    if(sizeOfTensor == Data_.size() && !IsNonContiguous_)
     {
         Shape_ = shape;
         calculateStrides();
@@ -91,7 +92,7 @@ void Tensor::Transpose(std::vector<size_t> permutations)
     };
     Shape_ = fShape;
     Strides_ = fStrides;
-    IsContiguous_ = true;
+    IsNonContiguous_ = true;
 };
 
 void Tensor::DangerSetData(std::vector<float> data)
@@ -136,5 +137,5 @@ void Tensor::DangerTranspose(std::vector<size_t> permutations)
     };
     Shape_ = fShape;
     Strides_ = fStrides;
-    IsContiguous_ = true;
+    IsNonContiguous_ = true;
 };
