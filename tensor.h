@@ -86,3 +86,4 @@ class Tensor{
         //инструменты
         const size_t& GetFlatIndex(std::vector<size_t> index) const;
 };
+
