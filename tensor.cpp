@@ -13,14 +13,14 @@ const std::vector<size_t>& Tensor::GetStrides() const
     return Strides_;
 };
 
-void Tensor::SetData(std::vector<float> data)
+void Tensor::SetData(const std::vector<float>& data)
 {
     size_t sizeOfTensor = 1;
-    for(size_t i = 0; i < Shape_.size(); i++) 
+    for(std::size_t dim : Shape_) 
     {
-        sizeOfTensor = sizeOfTensor * Shape_[i];
+        sizeOfTensor = sizeOfTensor * dim;
     };
-    if(data.size() == sizeOfTensor){ Data_ = data;}
+    if(data.size() == sizeOfTensor){ Data_ = std::move(data);}
     else{throw "incorrect shape or data of tensor"; };
 };
 
