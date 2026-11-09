@@ -400,3 +400,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# C/C++ build artifacts (LINUX/MacOS)
+*.o
+
+#CMake
+build/
+CMakeCache.txt

@@ -1,4 +1,6 @@
 #include "tensor.h"
+#include <cstddef>
+
 
 const std::vector<float>& Tensor::GetData () const
 {
@@ -20,8 +22,47 @@ void Tensor::SetData(const std::vector<float>& data)
     {
         sizeOfTensor = sizeOfTensor * dim;
     };
-    if(data.size() == sizeOfTensor){ Data_ = std::move(data);}
-    else{throw "incorrect shape or data of tensor"; };
+    if(data.size() == sizeOfTensor)
+    {
+        for(size_t i = 0; i < sizeOfTensor; ++i)
+        {
+            size_t n = i;
+            size_t offset = 0;
+            for(size_t j = Shape_.size(); j > 0; --j)
+            {
+                offset += (n % Shape_[j-1]) * Strides_[j-1];
+                n = n / Shape_[j-1]; 
+            }
+            Data_[offset] = data[i];
+
+        }
+    }
+    else {throw "size of data vector does not match the nuber of tensor' elements";};
+};
+
+void Tensor::SetData(std::vector<float>&& data)
+{
+    size_t sizeOfTensor = 1;
+    for(std::size_t dim : Shape_) 
+    {
+        sizeOfTensor = sizeOfTensor * dim;
+    };
+    if(data.size() == sizeOfTensor)
+    {
+        for(size_t i = 0; i < sizeOfTensor; ++i)
+        {
+            size_t n = i;
+            size_t offset = 0;
+            for(size_t j = Shape_.size(); j > 0; --j)
+            {
+                offset += (n % Shape_[j-1]) * Strides_[j-1];
+                n = n / Shape_[j-1]; 
+            }
+            Data_[offset] = data[i];
+
+        }
+    }
+    else {throw "size of data vector does not match the nuber of tensor' elements";};
 };
 
 void Tensor::Reshape(std::vector<size_t> shape)
@@ -58,10 +99,10 @@ const float& Tensor::GetDataAt(std::vector<size_t> index) const
 
 void Tensor::EditOnIndex(std::vector<size_t> index, float value)
 {
-    if(index.size() != Shape_.size()){throw "Invalid index";};
+    if(index.size() != Shape_.size()) {throw "Invalid index";};
     for(size_t i = 0; i < index.size(); i++)
     {
-        if(index[i] >= Shape_[i]){throw "Invalid index";}
+        if(index[i] >= Shape_[i]) {throw "Invalid index";}
     };
     size_t findex{0};
     for(size_t i = 0; i < index.size(); i++)
@@ -73,7 +114,7 @@ void Tensor::EditOnIndex(std::vector<size_t> index, float value)
 
 void Tensor::Transpose(std::vector<size_t> permutations)
 {
-    if(permutations.size() != Shape_.size()){throw "Invalid argument";}
+    if(permutations.size() != Shape_.size()) {throw "Invalid argument";}
     std::vector<int> seen(permutations.size(), 0);
     for(size_t i = 0; i < permutations.size(); i++)
     {
@@ -81,7 +122,7 @@ void Tensor::Transpose(std::vector<size_t> permutations)
     };
     for(size_t i = 0; i < permutations.size(); i++)
     {
-        if(seen.at(i) > 1){throw "Invalid argument";}
+        if(seen.at(i) > 1) {throw "Invalid argument";}
     };
     std::vector<size_t> fShape(permutations.size(), 0);
     std::vector<size_t> fStrides(permutations.size(), 0);
@@ -132,7 +173,7 @@ void Tensor::DangerTranspose(std::vector<size_t> permutations)
     IsContiguous_ = false;
 };
 
-const size_t& Tensor::GetFlatIndex(std::vector<size_t> index) const
+ size_t Tensor::GetFlatIndex(std::vector<size_t> index) const
 {
     size_t findex{0};
     for(size_t i = 0; i < index.size(); i++)
@@ -169,7 +210,7 @@ void Tensor::MakeContiguous()
 //операторы
 Tensor operator + (const Tensor& t1, const Tensor& t2)
 {
-    if(t1.GetShape() != t2.GetShape()){throw "Invalid argument";};
+    if(t1.GetShape() != t2.GetShape()) {throw "Invalid argument";};
     Tensor result{std::vector<float>(t1.GetData().size(), 1), t1.GetShape()};
     std::vector<size_t> index(t1.GetShape().size(), 0);
     for(size_t i = 0; i < t1.GetData().size(); i++)
@@ -186,7 +227,7 @@ Tensor operator + (const Tensor& t1, const Tensor& t2)
 
 Tensor operator - (const Tensor& t1, const Tensor& t2)
 {
-    if(t1.GetShape() != t2.GetShape()){throw "Invalid argument";};
+    if(t1.GetShape() != t2.GetShape()) {throw "Invalid argument";};
     Tensor result{std::vector<float>(t1.GetData().size(), 1), t1.GetShape()};
     std::vector<size_t> index(t1.GetShape().size(), 0);
     for(size_t i = 0; i < t1.GetData().size(); i++)
@@ -220,7 +261,7 @@ Tensor Tensor::Hadamart (const Tensor& t1, const Tensor& t2) //умножени�
 
 Tensor Tensor::MatrixMult (const Tensor& t1, const Tensor& t2) // только для двумерных тензеров ака матриц
 {
-    if(t1.GetShape().size() != 2 || t2.GetShape().size() != 2){ throw "Invalid Argument(invalid shape of tensors)";};
+    if(t1.GetShape().size() != 2 || t2.GetShape().size() != 2) { throw "Invalid Argument(invalid shape of tensors)";};
     if(t1.GetShape().at(t1.GetShape().size() - 1) != t2.GetShape().at(0)){ throw "Invalid Argument(invalid shape of tensors)";};
     Tensor result(std::vector<float>((t1.GetShape().at(0)*t2.GetShape().at(t2.GetShape().size() - 1)), 0), std::vector<size_t>{t1.GetShape().at(0), t2.GetShape().at(t2.GetShape().size() - 1)});
     for(size_t i = 0; i < t1.GetShape().at(0); i++)

@@ -30,7 +30,7 @@ class Tensor{
 
             Strides_ = resultStrides;
         };
-        const std::vector<size_t>& calculateStridesReturn()
+        std::vector<size_t> calculateStridesReturn()
         {
             size_t size = Shape_.size();
             std::vector<size_t> resultStrides(size, 1);
@@ -70,7 +70,8 @@ class Tensor{
         const float& GetDataAt(std::vector<size_t> index) const;
 
         //сеттеры
-        void SetData(std::vector<float> data); // только если количество эл совпадает с shape
+        void SetData(const std::vector<float>& data); // только если количество эл совпадает с shape
+        void SetData(std::vector<float>&& data); // для rvalue значений
         void Reshape(std::vector<size_t> shape); // тоже проверить валидность преобразования или сделать автообрезание/дополнение даты
         void EditOnIndex(std::vector<size_t> index, float value);
         void Transpose(std::vector<size_t> permutations);
@@ -84,10 +85,10 @@ class Tensor{
         const float& DangerGetDataAt(std::vector<size_t> index) const;
 
         //инструменты
-        const size_t& GetFlatIndex(std::vector<size_t> index) const;
+        size_t GetFlatIndex(std::vector<size_t> index) const;
 
         //операторы умножений
         Tensor Hadamart (const Tensor& t1, const Tensor& t2);
-        Tensor Tensor::MatrixMult (const Tensor& t1, const Tensor& t2);
+        Tensor MatrixMult (const Tensor& t1, const Tensor& t2);
 };
 
