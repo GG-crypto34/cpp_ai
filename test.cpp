@@ -1,5 +1,4 @@
 #include "./tensor.h"
-#include "./tensor.cpp"
 
 #include <iostream>
 int main()
