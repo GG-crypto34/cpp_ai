@@ -70,7 +70,7 @@ class Tensor{
         const float& GetDataAt(std::vector<size_t> index) const;
 
         //сеттеры
-        void SetData(std::vector<float> data); // только если количество эл совпадает с shape
+        void SetData(const std::vector<float>& data); // только если количество эл совпадает с shape
         void Reshape(std::vector<size_t> shape); // тоже проверить валидность преобразования или сделать автообрезание/дополнение даты
         void EditOnIndex(std::vector<size_t> index, float value);
         void Transpose(std::vector<size_t> permutations);
@@ -88,6 +88,6 @@ class Tensor{
 
         //операторы умножений
         Tensor Hadamart (const Tensor& t1, const Tensor& t2);
-        Tensor Tensor::MatrixMult (const Tensor& t1, const Tensor& t2);
+        Tensor MatrixMult (const Tensor& t1, const Tensor& t2);
 };
 

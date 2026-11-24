@@ -201,7 +201,7 @@ Tensor operator - (const Tensor& t1, const Tensor& t2)
     return result;
 };
 
-Tensor Tensor::Hadamart (const Tensor& t1, const Tensor& t2) //умножение тензоров по Адамару
+Tensor Hadamart (const Tensor& t1, const Tensor& t2) //умножение тензоров по Адамару
 {
     if(t1.GetShape() != t2.GetShape()){throw "Invalid argument";};
     Tensor result{std::vector<float>(t1.GetData().size(), 1), t1.GetShape()};
@@ -218,7 +218,7 @@ Tensor Tensor::Hadamart (const Tensor& t1, const Tensor& t2) //умножени�
     return result;
 };
 
-Tensor Tensor::MatrixMult (const Tensor& t1, const Tensor& t2) // только для двумерных тензеров ака матриц
+Tensor MatrixMult (const Tensor& t1, const Tensor& t2) // только для двумерных тензеров ака матриц
 {
     if(t1.GetShape().size() != 2 || t2.GetShape().size() != 2){ throw "Invalid Argument(invalid shape of tensors)";};
     if(t1.GetShape().at(t1.GetShape().size() - 1) != t2.GetShape().at(0)){ throw "Invalid Argument(invalid shape of tensors)";};
