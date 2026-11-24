@@ -30,7 +30,7 @@ class Tensor{
 
             Strides_ = resultStrides;
         };
-        const std::vector<size_t>& calculateStridesReturn()
+        std::vector<size_t> calculateStridesReturn()
         {
             size_t size = Shape_.size();
             std::vector<size_t> resultStrides(size, 1);
@@ -84,10 +84,11 @@ class Tensor{
         const float& DangerGetDataAt(std::vector<size_t> index) const;
 
         //инструменты
-        const size_t& GetFlatIndex(std::vector<size_t> index) const;
+        size_t GetFlatIndex(std::vector<size_t> index) const;
 
         //операторы умножений
         Tensor Hadamart (const Tensor& t1, const Tensor& t2);
         Tensor MatrixMult (const Tensor& t1, const Tensor& t2);
+        Tensor Mult (const Tensor& t1, const float& value);
 };
 

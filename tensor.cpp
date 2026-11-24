@@ -132,7 +132,7 @@ void Tensor::DangerTranspose(std::vector<size_t> permutations)
     IsContiguous_ = false;
 };
 
-const size_t& Tensor::GetFlatIndex(std::vector<size_t> index) const
+size_t Tensor::GetFlatIndex(std::vector<size_t> index) const
 {
     size_t findex{0};
     for(size_t i = 0; i < index.size(); i++)
@@ -220,7 +220,7 @@ Tensor Hadamart (const Tensor& t1, const Tensor& t2) //умножение тен
 
 Tensor MatrixMult (const Tensor& t1, const Tensor& t2) // только для двумерных тензеров ака матриц
 {
-    if(t1.GetShape().size() != 2 || t2.GetShape().size() != 2){ throw "Invalid Argument(invalid shape of tensors)";};
+    if(t1.GetShape().size() != 2 || t2.GetShape().size() != 2){ throw "Invalid Argument(Not Martrix)";};
     if(t1.GetShape().at(t1.GetShape().size() - 1) != t2.GetShape().at(0)){ throw "Invalid Argument(invalid shape of tensors)";};
     Tensor result(std::vector<float>((t1.GetShape().at(0)*t2.GetShape().at(t2.GetShape().size() - 1)), 0), std::vector<size_t>{t1.GetShape().at(0), t2.GetShape().at(t2.GetShape().size() - 1)});
     for(size_t i = 0; i < t1.GetShape().at(0); i++)
@@ -232,5 +232,17 @@ Tensor MatrixMult (const Tensor& t1, const Tensor& t2) // только для д
             result.EditOnIndex(std::vector<size_t>{i,i1}, product);
         };
     };
+    return result;
+};
+
+Tensor Mult(const Tensor& t1, const float& value) //умножение тензора на скаляр
+{
+    Tensor result = t1;
+    std::vector<float> resultData(t1.GetData().size(), 0);
+    for(size_t i = 0; i < t1.GetData().size(); i++)
+    {
+        resultData.at(i) = t1.GetData().at(i) * value;
+    };
+    result.DangerSetData(resultData);
     return result;
 };

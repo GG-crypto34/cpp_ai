@@ -9,13 +9,12 @@ int main()
 
     try
     {
-        Tensor resultMatrixMult({1},{1});
-        resultMatrixMult = MatrixMult(tensor1, tensor2);
-        
-        for(size_t i = 0; i < resultMatrixMult.GetData().size(); i++)
+        float value = 1.2f;
+        Tensor resultMult = Mult(tensor1, value);
+        for (size_t i = 0; i < resultMult.GetData().size(); i++)
         {
-            std::cout << "Matrix Product:\n" << resultMatrixMult.GetData().at(i) << std::endl;
-        };
+            std::cout << resultMult.GetData().at(i) << std::endl;
+        }
     }
     catch (const char* message)
     {
