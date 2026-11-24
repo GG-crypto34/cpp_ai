@@ -97,3 +97,8 @@ Tensor Mult (const Tensor& t1, const float& value);
 
 //деление
 Tensor DivH (const Tensor& t1, const Tensor& t2);
+
+//инструменты
+float Sum(const Tensor& t);
+float Mean(const Tensor& t);
+float Max(const Tensor& t);

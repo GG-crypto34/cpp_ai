@@ -4,15 +4,15 @@
 int main()
 {
     Tensor tensor1({1, 2, 3, 4, 5, 6}, {3, 2});
-    Tensor tensor2({3, 3, 0, 2}, {2, 2});
+    Tensor tensor2({3, 3, 0, 2, 4, 5}, {3, 2});
 
     try
     {
         float value = 1.2f;
-        Tensor resultMult = Mult(tensor1, value);
-        for (size_t i = 0; i < resultMult.GetData().size(); i++)
+        Tensor resultDiv = DivH(tensor1, tensor2);
+        for (size_t i = 0; i < resultDiv.GetData().size(); i++)
         {
-            std::cout << resultMult.GetData().at(i) << std::endl;
+            std::cout << resultDiv.GetData().at(i) << std::endl;
         }
     }
     catch (const char* message)

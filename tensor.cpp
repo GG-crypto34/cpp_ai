@@ -263,3 +263,13 @@ Tensor DivH (const Tensor& t1, const Tensor& t2) //деление поэлеме
     };
     return result;
 };
+
+float Sum(const Tensor& t)
+{
+    float result(0);
+    for(size_t i = 0; i < t.GetData().size(); i++)
+    {
+        result += t.GetData().at(i);
+    };
+    return result;
+};
