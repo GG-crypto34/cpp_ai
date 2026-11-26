@@ -59,6 +59,7 @@ class Tensor{
             }
             else
             {
+                if(sizeOfTensor > data.size()){ data = std::vector<float> (sizeOfTensor, data[0]);};
                 throw "Invalid arguments";
             };
         };
